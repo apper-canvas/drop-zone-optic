@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import Header from "@/components/organisms/Header";
 import FileUploadZone from "@/components/organisms/FileUploadZone";
-import ApperIcon from "@/components/atoms/ApperIcon";
+import ApperIcon from "@/components/ApperIcon";
 import React from "react";
 const HomePage = () => {
   return (
