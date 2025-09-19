@@ -1,0 +1,46 @@
+[
+  {
+    "Id": 1,
+    "name": "project-proposal.pdf",
+    "size": 2048576,
+    "type": "application/pdf",
+    "status": "completed",
+    "progress": 100,
+    "uploadedAt": "2024-01-15T10:30:00Z",
+    "url": "https://example.com/files/project-proposal.pdf",
+    "error": null
+  },
+  {
+    "Id": 2,
+    "name": "presentation-slides.pptx",
+    "size": 5242880,
+    "type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "status": "completed",
+    "progress": 100,
+    "uploadedAt": "2024-01-15T11:45:00Z",
+    "url": "https://example.com/files/presentation-slides.pptx",
+    "error": null
+  },
+  {
+    "Id": 3,
+    "name": "team-photo.jpg",
+    "size": 1572864,
+    "type": "image/jpeg",
+    "status": "completed",
+    "progress": 100,
+    "uploadedAt": "2024-01-15T14:20:00Z",
+    "url": "https://example.com/files/team-photo.jpg",
+    "error": null
+  },
+  {
+    "Id": 4,
+    "name": "data-export.csv",
+    "size": 3145728,
+    "type": "text/csv",
+    "status": "failed",
+    "progress": 45,
+    "uploadedAt": "2024-01-15T16:10:00Z",
+    "url": null,
+    "error": "Network connection failed"
+  }
+]

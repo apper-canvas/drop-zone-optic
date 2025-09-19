@@ -1,0 +1,16 @@
+[
+  {
+    "Id": 1,
+    "files": [1, 2, 3],
+    "totalSize": 8863744,
+    "completedFiles": 3,
+    "createdAt": "2024-01-15T10:30:00Z"
+  },
+  {
+    "Id": 2,
+    "files": [4],
+    "totalSize": 3145728,
+    "completedFiles": 0,
+    "createdAt": "2024-01-15T16:10:00Z"
+  }
+]
