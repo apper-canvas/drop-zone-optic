@@ -141,6 +141,23 @@ const FileCard = ({
               </div>
             )}
 
+{/* AI Description */}
+            {file.status === "analyzing" && (
+              <div className="mt-1 flex items-center gap-1">
+                <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-xs text-secondary">Analyzing image...</span>
+              </div>
+            )}
+            
+            {file.description && file.status === "completed" && (
+              <div className="mt-2 p-2 bg-accent/10 rounded border border-accent/20">
+                <div className="flex items-start gap-1">
+                  <ApperIcon name="Sparkles" size={12} className="text-accent mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-gray-700 leading-relaxed">{file.description}</p>
+                </div>
+              </div>
+            )}
+
             {/* Success URL */}
             {file.status === "completed" && file.url && (
               <div className="mt-1">

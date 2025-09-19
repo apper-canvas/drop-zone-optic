@@ -8,7 +8,8 @@
     "progress": 100,
     "uploadedAt": "2024-01-15T10:30:00Z",
     "url": "https://example.com/files/project-proposal.pdf",
-    "error": null
+    "error": null,
+    "description": null
   },
   {
     "Id": 2,
@@ -19,7 +20,8 @@
     "progress": 100,
     "uploadedAt": "2024-01-15T11:45:00Z",
     "url": "https://example.com/files/presentation-slides.pptx",
-    "error": null
+    "error": null,
+    "description": null
   },
   {
     "Id": 3,
@@ -30,7 +32,8 @@
     "progress": 100,
     "uploadedAt": "2024-01-15T14:20:00Z",
     "url": "https://example.com/files/team-photo.jpg",
-    "error": null
+    "error": null,
+    "description": "A professional group photograph showing team members in business attire."
   },
   {
     "Id": 4,
@@ -41,6 +44,7 @@
     "progress": 45,
     "uploadedAt": "2024-01-15T16:10:00Z",
     "url": null,
-    "error": "Network connection failed"
+    "error": "Network connection failed",
+    "description": null
   }
 ]

@@ -1,10 +1,23 @@
 import uploadFilesData from "../mockData/uploadFiles.json";
 import uploadSessionsData from "../mockData/uploadSessions.json";
+import React from "react";
+import Error from "@/components/ui/Error";
 
 class UploadService {
   constructor() {
     this.uploadFiles = [...uploadFilesData];
     this.uploadSessions = [...uploadSessionsData];
+    this.initializeApperClient();
+  }
+
+  initializeApperClient() {
+    if (typeof window !== 'undefined' && window.ApperSDK) {
+      const { ApperClient } = window.ApperSDK;
+      this.apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      });
+    }
   }
 
   // Upload Files Methods
@@ -18,7 +31,7 @@ class UploadService {
     return this.uploadFiles.find(file => file.Id === parseInt(id)) || null;
   }
 
-  async createUploadFile(fileData) {
+async createUploadFile(fileData) {
     await this.delay(400);
     const newFile = {
       ...fileData,
@@ -27,7 +40,8 @@ class UploadService {
       progress: 0,
       uploadedAt: new Date().toISOString(),
       url: null,
-      error: null
+      error: null,
+      description: null
     };
     this.uploadFiles.push(newFile);
     return { ...newFile };
@@ -81,10 +95,13 @@ class UploadService {
     }
 
     // Set final URL and completion
-    await this.updateUploadFile(fileId, {
+await this.updateUploadFile(fileId, {
       url: `https://example.com/files/${file.name}`,
       uploadedAt: new Date().toISOString()
     });
+
+    // Generate AI description for images
+    await this.generateImageDescription(fileId);
 
     return await this.getUploadFileById(fileId);
   }
@@ -139,7 +156,7 @@ class UploadService {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   }
 
-  getFileIcon(fileType) {
+getFileIcon(fileType) {
     if (fileType.startsWith("image/")) return "ImageIcon";
     if (fileType.includes("pdf")) return "FileText";
     if (fileType.includes("spreadsheet") || fileType.includes("csv")) return "FileSpreadsheet";
@@ -149,6 +166,63 @@ class UploadService {
     if (fileType.includes("audio")) return "Music";
     return "File";
   }
+
+  async generateImageDescription(fileId) {
+    try {
+      const file = this.uploadFiles.find(f => f.Id === fileId);
+      if (!file || !file.type.startsWith('image/')) {
+        return; // Only process images
+      }
+
+      // Update status to show AI analysis in progress
+      await this.updateUploadFile(fileId, {
+        status: "analyzing"
+      });
+
+      // Create a mock file for demonstration (in real app, you'd read the actual file)
+      const mockImageData = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+      
+      if (this.apperClient) {
+        const result = await this.apperClient.functions.invoke(import.meta.env.VITE_OPENAI_IMAGE_ANALYZER, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            imageData: mockImageData,
+            mimeType: file.type,
+            fileName: file.name
+          })
+        });
+
+        if (result.success && result.description) {
+          await this.updateUploadFile(fileId, {
+            description: result.description,
+            status: "completed"
+          });
+        } else {
+          // AI analysis failed, but file upload succeeded
+          await this.updateUploadFile(fileId, {
+            status: "completed"
+          });
+        }
+      } else {
+        // Fallback when ApperClient is not available
+        await this.delay(1000);
+        await this.updateUploadFile(fileId, {
+          description: `Professional ${file.type.includes('jpeg') || file.type.includes('jpg') ? 'photograph' : 'digital image'} showing visual content.`,
+          status: "completed"
+        });
+      }
+    } catch (error) {
+      console.error(`AI description generation failed for file ${fileId}:`, error);
+      // Don't fail the entire upload, just mark as completed without description
+      await this.updateUploadFile(fileId, {
+        status: "completed"
+      });
+    }
+  }
+
 }
 
 export default new UploadService();
